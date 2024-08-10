@@ -7,11 +7,12 @@
 - Drag & Drop your icons inside of the `sins2-icon-gen.exe`
 ---
 
-Edit the `icons.json` if you wish to modify the dimensions of your icons
+Edit the `icon_dimensions.json` if you wish to modify the dimensions of your icons
 
 ```json
 {
-  "hud_icon": [170, 80], // width, height
+  "icon": [170, 80], // width, height
+  "hud_icon": [170, 80],
   "tooltip_picture": [918, 432]
 }
 ```

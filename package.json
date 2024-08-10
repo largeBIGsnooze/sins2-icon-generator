@@ -1,6 +1,6 @@
 {
   "name": "sins2-icon-generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generates Sins 2 Icons",
   "main": "index.js",
   "scripts": {
