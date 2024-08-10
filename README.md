@@ -21,10 +21,7 @@ You can alternatively write a .bat script to iterate over all the icons without 
 ```bat
 @echo off
 
-echo processing icons postfixed as: icon200, hud_icon200, tooltip_picture200
-echo.
-
-for %%i in (*.png) do (
+for %%i in (*hud_icon200.png, *icon200.png, *tooltip_picture200.png) do (
 	echo processing: %%i
 	sins2-icon-gen.exe -s %%i
 )
