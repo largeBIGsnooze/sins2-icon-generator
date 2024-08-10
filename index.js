@@ -3,6 +3,8 @@ const { execFile } = require('child_process')
 const path = require('path')
 const ora = require('ora')
 const fs = require('fs')
+
+const _ICON_CONFIG_NAME = 'icon_dimensions.json'
 /* ----------------------------------------------------------------------
 Input:
     - trader_robotics_cruiser_repair_droids_ability_hud_icon200 (none)
@@ -16,7 +18,7 @@ class Config {
 
     static init() {
         try {
-            Config.settings = JSON.parse(fs.readFileSync(__dirname + '/icons.json', 'utf-8'))
+            Config.settings = JSON.parse(fs.readFileSync(__dirname + `/${_ICON_CONFIG_NAME}`, 'utf-8'))
         } catch {
             Config.reset()
             Config.save()
@@ -24,12 +26,13 @@ class Config {
     }
 
     static save() {
-        fs.writeFileSync(__dirname + '/icons.json', JSON.stringify(Config.settings, null, 2))
+        fs.writeFileSync(__dirname + `/${_ICON_CONFIG_NAME}`, JSON.stringify(Config.settings, null, 2))
         Config.init()
     }
 
     static reset() {
         Config.settings = {
+            icon: [170, 80],
             hud_icon: [170, 80],
             tooltip_picture: [918, 432],
         }
@@ -45,14 +48,11 @@ async function magick(path, op, val, filename) {
 
 async function processIcon(icon, config) {
     const colors = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'gray']
-    const r = /(.*)(\.(tga|png))/
+    const r = /(.*)200(\.png)/
     const fileName = path.basename(icon, path.extname(icon))
 
-    let icon_type = ['hud_icon', 'tooltip_picture'].find((e) => fileName.endsWith(e))
-    if (!icon_type) {
-        console.error('invalid icon: ', path.basename(icon))
-        return
-    }
+    let icon_type = Object.keys(config).find((e) => fileName.endsWith(e + '200'))
+    if (!icon_type) return
 
     const [width, height] = config[icon_type]
 
@@ -63,13 +63,11 @@ async function processIcon(icon, config) {
     spinner.text = `generating icons from: ${path.basename(icon)}`
     spinner.color = colors[Math.floor(Math.random() * colors.length)]
 
-    await magick(icon, '-resize', `${width}x${height}!`, _200)
-    await magick(_200, '-scale', '75%', _150)
-    await magick(_200, '-scale', '50%', _0)
+    await Promise.all([await magick(icon, '-resize', `${width}x${height}!`, _200), await magick(_200, '-scale', '75%', _150), await magick(_200, '-scale', '50%', _0)])
 }
 
 async function processIcons(icons, config) {
-    console.log('processing icons ending with: \n - hud_icon \n - tooltip_picture\n')
+    console.log(`processing icons postfixed as: ${Object.keys(config).join('200, ')}200`)
     spinner.start()
     for (const icon of icons) await processIcon(icon, config)
     spinner.stop()

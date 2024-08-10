@@ -8,7 +8,7 @@ const build = exe({
     properties: {
         ProductName: 'Sins 2 Icon Generator',
         OriginalFilename: 'sins2-icon-gen.exe',
-        FileDescription: 'Generates 3 subicons from an icon',
+        FileDescription: 'Generates subicons for Sins of A Solar Empire 2 from an icon',
     },
 })
 

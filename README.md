@@ -20,9 +20,7 @@ You can alternatively write a .bat script to iterate over all the icons without 
 ```bat
 @echo off
 
-echo processing icons ending with:
-echo - hud_icon
-echo - tooltip_picture
+echo processing icons postfixed as: icon200, hud_icon200, tooltip_picture200
 echo.
 
 for %%i in (*.png) do (
